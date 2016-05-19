@@ -16,8 +16,14 @@ LightingScene.prototype.constructor = LightingScene;
 LightingScene.prototype.init = function(application) {
 	CGFscene.prototype.init.call(this, application);
 
-	this.option1 = true;
-	this.option2 = false;
+	this.LIGHT_0 = true;
+	this.LIGHT_1 = true;
+	this.LIGHT_2 = true;
+	this.LIGHT_3 = true;
+	this.LIGHT_4 = true;
+
+	this.clockAnimation = true;
+
 	this.speed = 3;
 
 	this.enableTextures(true);
@@ -47,7 +53,7 @@ LightingScene.prototype.init = function(application) {
 
 	this.clock = new MyClock(this);
 
-	this.drone = new MyDrone(this,0.5,0.3,0);
+	this.drone = new MyDrone(this);
 
 	// Materials
 	this.materialDefault = new CGFappearance(this);
@@ -132,11 +138,9 @@ LightingScene.prototype.initLights = function() {
 	this.lights[0].setAmbient(0, 0, 0, 1);
 	this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
 	this.lights[0].setSpecular(1,1,0,1);
-	this.lights[0].enable();
 
 	this.lights[1].setAmbient(0, 0, 0, 1);
 	this.lights[1].setDiffuse(1.0, 1.0, 1.0, 1.0);
-	this.lights[1].enable();
 
 	this.lights[2].setAmbient(0, 0, 0, 1);
 	this.lights[2].setDiffuse(1.0, 1.0, 1.0, 1.0);
@@ -144,7 +148,6 @@ LightingScene.prototype.initLights = function() {
 	this.lights[2].setConstantAttenuation(0.0); //kc
 	this.lights[2].setLinearAttenuation(1); //kl
 	this.lights[2].setQuadraticAttenuation(0.0); //kq
-	this.lights[2].enable();
 
 	this.lights[3].setAmbient(0, 0, 0, 1);
 	this.lights[3].setDiffuse(1.0, 1.0, 1.0, 1.0);
@@ -152,22 +155,18 @@ LightingScene.prototype.initLights = function() {
 	this.lights[3].setConstantAttenuation(0.0); //kc
 	this.lights[3].setLinearAttenuation(0.0); //kl
 	this.lights[3].setQuadraticAttenuation(1); //kq
-	this.lights[3].enable();
 
 	this.lights[4].setAmbient(0, 0, 0, 1);
 	this.lights[4].setDiffuse(1.0, 1.0, 1.0, 1.0);
 	this.lights[4].setSpecular(0,0,0,0);
-	this.lights[4].enable();
+
+	
 };
 
 LightingScene.prototype.updateLights = function() {
 	for (i = 0; i < this.lights.length; i++)
 		this.lights[i].update();
 }
-
-LightingScene.prototype.doSomething = function() {
-	console.log("doing something");
-};
 
 
 LightingScene.prototype.moveDrone = function(direction) {
@@ -295,16 +294,48 @@ LightingScene.prototype.display = function() {
 
 	//drone
 	this.pushMatrix();
-		
-		this.translate(4, 5, 4);
-		this.rotate(180 * degToRad,1,0,0);
+		this.translate(this.drone.posX, this.drone.posY, this.drone.posZ);
+		this.rotate(this.drone.facingAngle * degToRad,0,1,0);
 		this.drone.display();
 	this.popMatrix();
 	// ---- END Primitive drawing section
+
+	if (this.LIGHT_0)
+		this.lights[0].enable();
+	else
+		this.lights[0].disable();
+
+	if (this.LIGHT_1)
+		this.lights[1].enable();
+	else
+		this.lights[1].disable();
+
+	if (this.LIGHT_2)
+		this.lights[2].enable();
+	else
+		this.lights[2].disable();
+
+	if (this.LIGHT_3)
+		this.lights[3].enable();
+	else
+		this.lights[3].disable();
+		
+	if (this.LIGHT_4)
+		this.lights[4].enable();
+	else
+		this.lights[4].disable();
 };
 
 LightingScene.prototype.update = function(currTime) {
+	if (this.clockAnimation)
+		this.clock.update(currTime);
 
-	this.clock.update(currTime);
+}
 
+LightingScene.prototype.changeClockAnimation = function() {
+
+	if (this.clockAnimation)
+		this.clockAnimation = false;
+	else
+		this.clockAnimation = true;
 }
