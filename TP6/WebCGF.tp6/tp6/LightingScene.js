@@ -48,7 +48,7 @@ LightingScene.prototype.init = function(application) {
 	this.boardA = new Plane(this, BOARD_A_DIVISIONS);
 	this.boardB = new Plane(this, BOARD_B_DIVISIONS);
 
-	this.prism = new MyPrism(this,8,20);
+	this.lamp = new MySemisphere(this,8,20);
 	this.cylinder = new MyCylinder(this,8,20);
 
 	this.clock = new MyClock(this);
@@ -103,7 +103,7 @@ LightingScene.prototype.init = function(application) {
 	this.pillarAppearance.loadTexture("../resources/images/pillar.jpg");
 	this.pillarAppearance.setTextureWrap("CLAMP_TO_EDGE","CLAMP_TO_EDGE");
 	
-	this.setUpdatePeriod(100);
+	this.setUpdatePeriod(1000/33);
 	
 };
 
@@ -170,7 +170,7 @@ LightingScene.prototype.updateLights = function() {
 
 
 LightingScene.prototype.moveDrone = function(direction) {
-	this.drone.update(direction);
+	this.drone.move(direction);
 };
 
 LightingScene.prototype.display = function() {
@@ -215,16 +215,16 @@ LightingScene.prototype.display = function() {
 	this.popMatrix();
 
 	this.pushMatrix();
-		this.translate(13, 3.6, 8);
-		this.rotate(-90 * degToRad, 1, 0, 0);
-		//this.scale(15, 15, 0.2);
-		this.prism.display();
+		this.translate(8, 8, 8);
+		this.rotate(90 * degToRad, 1, 0, 0);
+		this.scale(1, 1, 1);
+		this.lamp.display();
 	this.popMatrix();
 
 	this.pushMatrix();
 		this.translate(6, 3.6, 8);
 		this.rotate(-90 * degToRad, 1, 0, 0);
-		this.cylinder.display();
+		//this.cylinder.display();
 	this.popMatrix();
 
 	// Left Wall
@@ -295,7 +295,7 @@ LightingScene.prototype.display = function() {
 	//drone
 	this.pushMatrix();
 		this.translate(this.drone.posX, this.drone.posY, this.drone.posZ);
-		this.rotate(this.drone.facingAngle * degToRad,0,1,0);
+		this.rotate(this.drone.facingAngle * degToRad, 0, 1, 0);
 		this.drone.display();
 	this.popMatrix();
 	// ---- END Primitive drawing section
@@ -329,7 +329,7 @@ LightingScene.prototype.display = function() {
 LightingScene.prototype.update = function(currTime) {
 	if (this.clockAnimation)
 		this.clock.update(currTime);
-
+	this.drone.update(currTime);
 }
 
 LightingScene.prototype.changeClockAnimation = function() {
