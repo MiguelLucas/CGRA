@@ -1,4 +1,15 @@
-/**
+ MyPropeller.rotationSpeeds =
+ {
+ 	VERYVERYSLOW : 0.05,
+ 	VERYSLOW : 0.1,
+ 	SLOW : 0.2,
+ 	NORMAL : 1,
+ 	FAST : 10,
+ 	VERYFAST : 14,
+ 	VERYVERYFAST : 16
+ };
+
+ /**
  * MyPropeller
  * @constructor
  */
@@ -11,18 +22,12 @@
  	if(!isClockwise)
  	  this.rotationDir = -1;
 
- 	this.rotationSpeeds = {
- 	    SLOW : 0.2,
- 	    NORMAL : 1,
- 	    FAST : 10
- 	}
-
- 	this.rotationSpeed = this.rotationSpeeds.NORMAL;
+ 	this.rotationSpeed = MyPropeller.rotationSpeeds.NORMAL;
  	this.angle = 0;
- 	this.previousInstant = 0;
+ 	this.previousInstant = Date.now();
 
  	this.semisphere = new MySemisphere(this.scene, 16, 5);
- 	this.cylinder = new MyCylinder(this.scene, 8, 5);
+ 	this.cylinder = new MyCylinder(this.scene, 8, 5, true, true);
 
  };
 
@@ -63,8 +68,54 @@
  }
 
  MyPropeller.prototype.update = function(t) {
-     var t0 = this.previousInstant;
-     this.previousInstant = t;
-     //this.angle = (this.angle + (t-t0)/1000*this.rotationSpeed*this.rotationDir * 360) % 360;
-     this.angle = ((t)/1000*this.rotationSpeed*this.rotationDir * 360) % 360;
-}
+ 	var deltaT = t - this.previousInstant;
+ 	this.previousInstant = t;
+ 	this.angle = (this.angle + deltaT/1000*this.rotationSpeed*360*this.rotationDir) % 360;
+ 	//this.angle = ((t)/1000*this.rotationSpeed*this.rotationDir * 360) % 360;
+ }
+
+  MyPropeller.prototype.increaseSpeed = function() {
+     switch(this.rotationSpeed){
+     	case MyPropeller.rotationSpeeds.VERYVERYSLOW:
+     		this.rotationSpeed = MyPropeller.rotationSpeeds.VERYSLOW;
+     		break;
+     	case MyPropeller.rotationSpeeds.VERYSLOW:
+     		this.rotationSpeed = MyPropeller.rotationSpeeds.SLOW;
+     		break;
+     	case MyPropeller.rotationSpeeds.SLOW:
+     		this.rotationSpeed = MyPropeller.rotationSpeeds.NORMAL;
+     		break;
+     	case MyPropeller.rotationSpeeds.NORMAL:
+     		this.rotationSpeed = MyPropeller.rotationSpeeds.FAST;
+     		break;
+     	case MyPropeller.rotationSpeeds.FAST:
+     		this.rotationSpeed = MyPropeller.rotationSpeeds.VERYFAST;
+     		break;
+     	case MyPropeller.rotationSpeeds.VERYFAST:
+     		this.rotationSpeed = MyPropeller.rotationSpeeds.VERYVERYFAST;
+     		break;
+     }
+ }
+
+ MyPropeller.prototype.decreaseSpeed = function() {
+     switch(this.rotationSpeed){
+     	case MyPropeller.rotationSpeeds.VERYVERYFAST:
+     		this.rotationSpeed = MyPropeller.rotationSpeeds.VERYFAST;
+     		break;
+     	case MyPropeller.rotationSpeeds.VERYFAST:
+     		this.rotationSpeed = MyPropeller.rotationSpeeds.FAST;
+     		break;
+     	case MyPropeller.rotationSpeeds.FAST:
+     		this.rotationSpeed = MyPropeller.rotationSpeeds.NORMAL;
+     		break;
+     	case MyPropeller.rotationSpeeds.NORMAL:
+     		this.rotationSpeed = MyPropeller.rotationSpeeds.SLOW;
+     		break;
+     	case MyPropeller.rotationSpeeds.SLOW:
+     		this.rotationSpeed = MyPropeller.rotationSpeeds.VERYSLOW;
+     		break;
+     	case MyPropeller.rotationSpeeds.VERYSLOW:
+     		this.rotationSpeed = MyPropeller.rotationSpeeds.VERYVERYSLOW;
+     		break;
+     }
+ }

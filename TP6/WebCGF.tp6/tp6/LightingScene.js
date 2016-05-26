@@ -48,8 +48,8 @@ LightingScene.prototype.init = function(application) {
 	this.boardA = new Plane(this, BOARD_A_DIVISIONS);
 	this.boardB = new Plane(this, BOARD_B_DIVISIONS);
 
-	this.lamp = new MySemisphere(this,8,20);
-	this.cylinder = new MyCylinder(this,8,20);
+	this.lamp = new MySemisphere(this, 8, 20);
+	this.cylinder = new MyCylinder(this, 8, 20, true, true);
 
 	this.clock = new MyClock(this);
 
@@ -99,11 +99,11 @@ LightingScene.prototype.init = function(application) {
 	this.boardAppearance.setShininess(120);
 	this.boardAppearance.setTextureWrap("CLAMP_TO_EDGE","CLAMP_TO_EDGE");
 
-	this.pillarAppearance = new CGFappearance(this);
-	this.pillarAppearance.loadTexture("../resources/images/pillar.jpg");
-	this.pillarAppearance.setTextureWrap("CLAMP_TO_EDGE","CLAMP_TO_EDGE");
+	this.columnAppearance = new CGFappearance(this);
+	this.columnAppearance.loadTexture("../resources/images/pillar.jpg");
+	this.columnAppearance.setTextureWrap("CLAMP_TO_EDGE","CLAMP_TO_EDGE");
 	
-	this.setUpdatePeriod(1000/33);
+	this.setUpdatePeriod(1000/60);
 	
 };
 
@@ -158,20 +158,13 @@ LightingScene.prototype.initLights = function() {
 
 	this.lights[4].setAmbient(0, 0, 0, 1);
 	this.lights[4].setDiffuse(1.0, 1.0, 1.0, 1.0);
-	this.lights[4].setSpecular(0,0,0,0);
-
-	
+	this.lights[4].setSpecular(0,0,0,0);	
 };
 
 LightingScene.prototype.updateLights = function() {
 	for (i = 0; i < this.lights.length; i++)
 		this.lights[i].update();
 }
-
-
-LightingScene.prototype.moveDrone = function(direction) {
-	this.drone.move(direction);
-};
 
 LightingScene.prototype.display = function() {
 	// ---- BEGIN Background, camera and axis setup
@@ -276,28 +269,26 @@ LightingScene.prototype.display = function() {
 		this.boardB.display();
 	this.popMatrix();
 
-	//pillar
+	// Column
 	this.pushMatrix();
 		this.scale(1,8,1);
 		this.translate(2, 0, 14);
 		this.rotate(-90 * degToRad, 1, 0, 0);
-		this.pillarAppearance.apply();
+		this.columnAppearance.apply();
 		this.cylinder.display();
 	this.popMatrix();
 
-	//clock
+	// Clock
 	this.pushMatrix();
-		//this.scale(1,8,1);
 		this.translate(7.2, 7, 0);
 		this.clock.display();
 	this.popMatrix();
 
-	//drone
+	// Drone
 	this.pushMatrix();
-		this.translate(this.drone.posX, this.drone.posY, this.drone.posZ);
-		this.rotate(this.drone.facingAngle * degToRad, 0, 1, 0);
 		this.drone.display();
 	this.popMatrix();
+
 	// ---- END Primitive drawing section
 
 	if (this.LIGHT_0)

@@ -1,8 +1,18 @@
-/**
+ MyInterface.Keys =
+ {
+ 	LEFT : 65,		//a
+ 	RIGHT : 68,		//d
+ 	FORWARD : 87,	//w
+ 	BACK : 83,		//s
+ 	UP : 73,		//i
+ 	DOWN : 74		//j
+ };
+
+
+ /**
  * MyInterface
  * @constructor
  */
- 
  
 function MyInterface() {
 	//call CGFinterface constructor 
@@ -58,47 +68,59 @@ MyInterface.prototype.init = function(application) {
 };
 
 /**
- * processKeyboard
+ * processKeyDown
  * @param event {Event}
  */
-MyInterface.prototype.processKeyboard = function(event) {
-	// call CGFinterface default code (omit if you want to override)
-	CGFinterface.prototype.processKeyboard.call(this,event);
+MyInterface.prototype.processKeyDown = function(event) {
 	
-	// Check key codes e.g. here: http://www.asciitable.com/
-	// or use String.fromCharCode(event.keyCode) to compare chars
-	
-	// for better cross-browser support, you may also check suggestions on using event.which in http://www.w3schools.com/jsref/event_key_keycode.asp
-	switch (event.keyCode)
+	switch (event.which || event.keyCode)
 	{
-		case (65):	// only works for capital 'A', as it is
-			console.log("Key 'A' pressed");
-			this.scene.moveDrone('left');
+		case (MyInterface.Keys.LEFT):
+			this.scene.drone.move('left');
 			break;
-		case (97): //a
-			console.log("Key 'a' pressed");
-			this.scene.moveDrone('left');
+		case (MyInterface.Keys.RIGHT):
+			this.scene.drone.move('right');
 			break;
-		case (100): //d
-			console.log("Key 'd' pressed");
-			this.scene.moveDrone('right');
+		case (MyInterface.Keys.FORWARD):
+			this.scene.drone.move('forward');
 			break;
-		case (119): //w
-			console.log("Key 'w' pressed");
-			this.scene.moveDrone('forward');
+		case (MyInterface.Keys.BACK):
+			this.scene.drone.move('back');
 			break;
-		case (115): //s
-			console.log("Key 's' pressed");
-			this.scene.moveDrone('back');
+		case (MyInterface.Keys.UP):
+			this.scene.drone.move('up');
 			break;
-		case (105): //i
-			console.log("Key 'i' pressed");
-			this.scene.moveDrone('up');
-			break;
-		case (106): //j
-			console.log("Key 'j' pressed");
-			this.scene.moveDrone('down');
+		case (MyInterface.Keys.DOWN):
+			this.scene.drone.move('down');
 			break;
 	};
 };
 
+/**
+ * processKeyUp
+ * @param event {Event}
+ */
+MyInterface.prototype.processKeyUp = function(event) {
+	
+	switch (event.which || event.keyCode)
+	{
+		case (MyInterface.Keys.LEFT):
+			this.scene.drone.stop('left');
+			break;
+		case (MyInterface.Keys.RIGHT):
+			this.scene.drone.stop('right');
+			break;
+		case (MyInterface.Keys.FORWARD):
+			this.scene.drone.stop('forward');
+			break;
+		case (MyInterface.Keys.BACK):
+			this.scene.drone.stop('back');
+			break;
+		case (MyInterface.Keys.UP):
+			this.scene.drone.stop('up');
+			break;
+		case (MyInterface.Keys.DOWN):
+			this.scene.drone.stop('down');
+			break;
+	};
+};

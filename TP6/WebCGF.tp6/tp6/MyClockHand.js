@@ -2,42 +2,39 @@
  * MyClockHand
  * @constructor
  */
- function MyClockHand(scene, type) {
- 	CGFobject.call(this,scene);
+function MyClockHand(scene, length, thickness) {
+	CGFobject.call(this,scene);
+	
+	this.hand = new MyQuad(this.scene, 0, 1, 0, 1);
+	this.angle = 0;
+	this.length = length;
+	this.thickness = thickness;
 
-    this.angle=0;
- 	this.clockHand = new MyQuad(this.scene);
-    this.type = type;
- 	this.initBuffers();
- };
+	this.handAppearance = new CGFappearance(this.scene);
+	this.handAppearance = new CGFappearance(this.scene);
+	this.handAppearance.setAmbient(0.1, 0.1, 0.1, 1);
+	this.handAppearance.setDiffuse(0.1, 0.1, 0.1, 1);
+	this.handAppearance.setSpecular(0, 0, 0, 1);
+	this.handAppearance.setShininess(10);
 
- MyClockHand.prototype = Object.create(CGFobject.prototype);
- MyClockHand.prototype.constructor = MyClockHand;
-
-MyClockHand.prototype.display = function() {
-
-   	if (this.type == 'HOURS') {
-   	  this.scene.rotate(-this.angle * degToRad, 0, 0, 1);
- 	  this.scene.translate(0, 0.1, 0.21);
- 	  this.scene.scale(.025, 0.2, 1)
- 	  this.clockHand.display();
- 	}
- 	else if (this.type == 'MINUTES') {
- 	  this.scene.rotate(-this.angle * degToRad, 0, 0, 1);
- 	  this.scene.translate(0, 0.15, 0.21);
- 	  this.scene.scale(.025, 0.30, 1);
- 	  this.clockHand.display();
- 	}
- 	else if (this.type == 'SECONDS') {
-   	  this.scene.rotate(-this.angle * degToRad, 0, 0, 1);
-      this.scene.translate(0, 0.2, 0.2);
-      this.scene.scale(.025, 0.40, 1);
-      this.clockHand.display();
- 	}  
+	this.initBuffers();
 };
 
-MyClockHand.prototype.setAngle = function(angle) {
-    
-      this.angle = angle;
+MyClockHand.prototype = Object.create(CGFobject.prototype);
+MyClockHand.prototype.constructor=MyClockHand;
 
+MyClockHand.prototype.display = function () {
+
+	this.scene.pushMatrix();
+	this.scene.rotate(- this.angle * degToRad, 0, 0, 1);
+	this.scene.scale(this.thickness, this.length, 1);
+	this.scene.translate(0, 0.5, 0);
+	this.handAppearance.apply();
+	this.hand.display();
+	this.scene.popMatrix();
+
+};
+
+MyClockHand.prototype.setAngle = function(angle) {    
+      this.angle = angle;
 };
