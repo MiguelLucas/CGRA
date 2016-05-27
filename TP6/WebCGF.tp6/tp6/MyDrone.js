@@ -7,7 +7,6 @@ var degToRad = Math.PI / 180.0;
 function MyDrone(scene) {
     CGFobject.call(this, scene);
     
-	this.semisphere = new MySemisphere(this.scene,64,10);
     this.cylinder = new MyCylinder(this.scene,16,5,true,true);
     this.cube = new MyUnitCubeQuad(this.scene);
     this.propellerFront = new MyPropeller(this.scene,true);

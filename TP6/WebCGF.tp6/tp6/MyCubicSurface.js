@@ -13,8 +13,7 @@ function MyCubicSurface(scene, P2x, P2y, P3x, P3y, P4x, P4y) {
     this.P4y = P4y;
     
     this.initBuffers();
-}
-;
+};
 
 MyCubicSurface.prototype = Object.create(CGFobject.prototype);
 MyCubicSurface.prototype.constructor = MyQuad;
@@ -23,7 +22,7 @@ MyCubicSurface.prototype.initBuffers = function() {
     
     this.vertices = [];
     this.indices = [];
-    //this.normals = [];
+    this.normals = [];
     this.texCoords = [];
     
     var v = [];
@@ -37,6 +36,12 @@ MyCubicSurface.prototype.initBuffers = function() {
     var P4 = [this.P4x, this.P4y, 0];
     var P4z = [this.P4x, this.P4y, 1];
     this.vertices = this.vertices.concat(P0, P0, P0z, P0z, v, P4, P4, P4z, P4z);
+
+    var N0 = [-1,0,0];
+    var N0int = [1,0,0];
+    var N4 = [1,0,0];
+    var N4int = [-1,0,0];
+    this.normals = this.normals.concat(N0, N0int, N0, N0int, n, N4, N4int, N4, N4int);
 
     var T0 = [0,1];
     var T0z = [1,1];
@@ -109,8 +114,13 @@ MyCubicSurface.prototype.initBuffers = function() {
         texCoords.push.apply(texCoords, texCoordsLeft.concat(t0, t1, t1, t0, texCoordsRight));
                 
         //calcula normais
-        var n0 = [];
-        var n1 = [];
+        var alpha;
+        if(r2x == l3x)
+            alpha = Math.PI/4;
+        else
+            alpha = Math.atan((r2y-l3y)/(r2x-l3x));
+        var n0 = [-Math.sin(alpha), Math.cos(alpha), 0];
+        var n1 = [Math.sin(alpha), -Math.cos(alpha), 0];
         normals.push.apply(normals, normalsLeft.concat(n0, n1, n0, n1, normalsRight));
     }
 }

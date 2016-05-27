@@ -51,14 +51,14 @@ LightingScene.prototype.init = function(application) {
 	this.boardA = new Plane(this, BOARD_A_DIVISIONS);
 	this.boardB = new Plane(this, BOARD_B_DIVISIONS);
 
-	this.lamp = new MySemisphere(this, 8, 20);
+	this.lamp = new MySemisphere(this, 16, 10);
 	this.cylinder = new MyCylinder(this, 8, 20, true, true);
 
 	this.clock = new MyClock(this);
 
 	this.drone = new MyDrone(this);
 
-	this.droneFoot = new MyCubicSurface(this, 0, 2, 2, 2, 2, 0);
+	this.cubicSurface = new MyCubicSurface(this, 0, 2, 2, 2, 2, 0);
 
 	// Materials
 	this.materialDefault = new CGFappearance(this);
@@ -107,6 +107,10 @@ LightingScene.prototype.init = function(application) {
 	this.columnAppearance = new CGFappearance(this);
 	this.columnAppearance.loadTexture("../resources/images/pillar.jpg");
 	this.columnAppearance.setTextureWrap("CLAMP_TO_EDGE","CLAMP_TO_EDGE");
+
+	this.lampAppearance = new CGFappearance(this);
+	this.lampAppearance.loadTexture("../resources/images/lamp.png");
+	this.lampAppearance.setTextureWrap("CLAMP_TO_EDGE","CLAMP_TO_EDGE");
 
 	//colors
 
@@ -339,10 +343,12 @@ LightingScene.prototype.display = function() {
 		this.floor.display();
 	this.popMatrix();
 
+	// Lamp
 	this.pushMatrix();
 		this.translate(8, 8, 8);
 		this.rotate(90 * degToRad, 1, 0, 0);
 		this.scale(1, 1, 1);
+		this.lampAppearance.apply();
 		this.lamp.display();
 	this.popMatrix();
 
@@ -425,7 +431,7 @@ LightingScene.prototype.display = function() {
 	this.pushMatrix();
 		this.translate(1, 0, 1);
 		this.boardAppearance.apply();
-		this.droneFoot.display();
+		this.cubicSurface.display();
 	this.popMatrix();
 
 	//GUI Lights
