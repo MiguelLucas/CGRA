@@ -40,7 +40,8 @@
  	this.scene.pushMatrix();
  	 	this.scene.rotate(this.angle*degToRad, 0, 1, 0);
 		this.scene.rotate(-90*degToRad, 1, 0, 0);
-		this.scene.materialA.apply();
+		this.scene.scale(0.5,0.5,0.5);
+		this.scene.dronePropellerCenterAppearance[this.scene.currDroneAppearance].apply();
 		this.semisphere.display();
  	this.scene.popMatrix();
 
@@ -50,7 +51,7 @@
  	    this.scene.translate(0, 0.15, 0);
  	    this.scene.rotate(30*degToRad*this.rotationDir, 0, 0, 1);
 		this.scene.scale(.3, 0.1, 4);
-		this.scene.materialA.apply();
+		this.scene.dronePropellerBladesAppearance[this.scene.currDroneAppearance].apply();
 		this.cylinder.display();
  	this.scene.popMatrix();
 
@@ -61,7 +62,7 @@
  	 	this.scene.rotate(180*degToRad, 0, 1, 0);
  	    this.scene.rotate(30*degToRad*this.rotationDir, 0, 0, 1);
 		this.scene.scale(.3, 0.1, 4);
-		this.scene.materialA.apply();
+		this.scene.dronePropellerBladesAppearance[this.scene.currDroneAppearance].apply();
 		this.cylinder.display();
  	this.scene.popMatrix();
 

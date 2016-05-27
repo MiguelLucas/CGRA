@@ -18,6 +18,8 @@ serialInclude([
 	'MyInterface.js',
 	'MyDrone.js',
 	'MyPropeller.js',
+	'MyForm.js',
+	'MyDroneLeg.js',
 
 	main=function() {
 		var app = new CGFapplication(document.body);

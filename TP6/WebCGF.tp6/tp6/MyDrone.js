@@ -7,12 +7,14 @@ var degToRad = Math.PI / 180.0;
 function MyDrone(scene) {
     CGFobject.call(this, scene);
     
-    this.semisphere = new MySemisphere(this.scene,64,10);
+	this.semisphere = new MySemisphere(this.scene,64,10);
     this.cylinder = new MyCylinder(this.scene,16,5,true,true);
     this.cube = new MyUnitCubeQuad(this.scene);
     this.propellerFront = new MyPropeller(this.scene,true);
     this.propellerRear = new MyPropeller(this.scene,true);
     this.propellerSides = new MyPropeller(this.scene,false);
+    this.leg1 = new MyDroneLeg(this.scene,20);
+    this.leg2 = new MyDroneLeg(this.scene,20);
     
     //position
     this.posX = 4;
@@ -43,117 +45,142 @@ MyDrone.prototype.display = function()
 {
     // whole drone
     this.scene.pushMatrix();
-    this.scene.translate(this.posX, this.posY, this.posZ);
-    this.scene.rotate(this.facingAngle * degToRad, 0, 1, 0);
-    this.scene.rotate(this.pitchAngle * degToRad, 1, 0, 0);
-    
-    // drone body
+        this.scene.translate(this.posX, this.posY, this.posZ);
+        this.scene.rotate(this.facingAngle * degToRad, 0, 1, 0);
+        this.scene.rotate(this.pitchAngle * degToRad, 1, 0, 0);
+        this.scene.scale(2,2,2);
+   
+    //drone body
     this.scene.pushMatrix();
-    this.scene.rotate(-90 * degToRad, 1, 0, 0);
-    this.scene.scale(0.5, 0.5, 0.5);
-    this.scene.materialA.apply();
-    this.semisphere.display();
+    	this.scene.rotate(-180*degToRad, 0, 1, 0);
+		this.scene.rotate(-90*degToRad, 1, 0, 0);
+		this.scene.scale(0.25, 0.25, 0.25);
+		this.scene.droneBodyAppearance[this.scene.currDroneAppearance].apply();
+		this.semisphere.display();
+ 	this.scene.popMatrix();
+
+ 	this.scene.pushMatrix();
+        this.scene.rotate(90 * degToRad, 1, 0, 0);
+        this.scene.scale(0.25, 0.25, 0.025);
+        this.scene.droneBodyAppearance[this.scene.currDroneAppearance].apply();
+        this.semisphere.display();
     this.scene.popMatrix();
-    
-    this.scene.pushMatrix();
-    this.scene.rotate(90 * degToRad, 1, 0, 0);
-    this.scene.scale(0.5, 0.5, 0.1);
-    this.scene.materialA.apply();
-    this.semisphere.display();
-    this.scene.popMatrix();
-    
-    // drone longitudinal arm
-    this.scene.pushMatrix();
-    this.scene.scale(0.03, 0.03, 1.5);
-    this.scene.translate(0, 0, -0.5);
-    this.scene.materialA.apply();
-    this.cylinder.display();
-    this.scene.popMatrix();
-    
-    this.scene.pushMatrix();
-    this.scene.translate(0, -0.05, 0.75);
-    this.scene.rotate(-90 * degToRad, 1, 0, 0);
-    this.scene.scale(0.1, 0.1, .1);
-    this.scene.materialA.apply();
-    this.cylinder.display();
-    this.scene.popMatrix();
-    
-    this.scene.pushMatrix();
-    this.scene.translate(0, 0.05, 0.75);
-    this.scene.scale(0.1, 0.1, 0.1);
-    this.scene.materialA.apply();
-    this.propellerFront.display();
-    this.scene.popMatrix();
-    
-    this.scene.pushMatrix();
-    this.scene.translate(0, -0.05, -0.75);
-    this.scene.rotate(-90 * degToRad, 1, 0, 0);
-    this.scene.scale(0.1, 0.1, .1);
-    this.scene.materialA.apply();
-    this.cylinder.display();
-    this.scene.popMatrix();
-    
-    this.scene.pushMatrix();
-    this.scene.translate(0, 0.05, -0.75);
-    this.scene.scale(0.1, 0.1, 0.1);
-    this.scene.materialA.apply();
-    this.propellerRear.display();
-    this.scene.popMatrix();
-    
-    // drone transversal arm
-    this.scene.pushMatrix();
-    this.scene.rotate(-90 * degToRad, 0, 1, 0);
-    this.scene.scale(0.03, 0.03, 1.5);
-    this.scene.translate(0, 0, -0.5);
-    this.scene.materialA.apply();
-    this.cylinder.display();
-    this.scene.popMatrix();
-    
-    this.scene.pushMatrix();
-    this.scene.translate(-0.75, -0.05, 0);
-    this.scene.rotate(-90 * degToRad, 1, 0, 0);
-    this.scene.scale(0.1, 0.1, .1);
-    this.scene.materialA.apply();
-    this.cylinder.display();
-    this.scene.popMatrix();
-    
-    this.scene.pushMatrix();
-    this.scene.translate(-0.75, 0.05, 0);
-    this.scene.scale(0.1, 0.1, 0.1);
-    this.scene.materialA.apply();
-    this.propellerSides.display();
-    this.scene.popMatrix();
-    
-    this.scene.pushMatrix();
-    this.scene.translate(0.75, -0.05, 0);
-    this.scene.rotate(-90 * degToRad, 1, 0, 0);
-    this.scene.scale(0.1, 0.1, .1);
-    this.scene.materialA.apply();
-    this.cylinder.display();
-    this.scene.popMatrix();
-    
-    this.scene.pushMatrix();
-    this.scene.translate(0.75, 0.05, 0);
-    this.scene.scale(0.1, 0.1, 0.1);
-    this.scene.materialA.apply();
-    this.propellerSides.display();
-    this.scene.popMatrix();
-    
-    // drone right foot
-    this.scene.pushMatrix();
-    this.scene.translate(-0.3, -0.3, 0);
-    this.scene.scale(0.03, 0.03, 1);
-    this.scene.materialA.apply();
-    this.cube.display();
-    this.scene.popMatrix();
-    
-    // drone left foot
-    this.scene.pushMatrix();
-    this.scene.translate(0.3, -0.3, 0);
-    this.scene.scale(0.03, 0.03, 1);
-    this.scene.materialA.apply();
-    this.cube.display();
-    this.scene.popMatrix();
+
+ 	// drone longitudinal arm
+ 	this.scene.pushMatrix();
+		this.scene.scale(0.03, 0.03, 1.5);
+		this.scene.translate(0, 0, -0.5);
+		//this.scene.materialA.apply();
+		this.scene.droneLongitudalArmAppearance[this.scene.currDroneAppearance].apply();
+		this.cylinder.display();
+ 	this.scene.popMatrix();
+
+	//drone longitudinal arm base 1
+ 	this.scene.pushMatrix();
+ 		this.scene.translate(0, -0.05, 0.75);
+		this.scene.rotate(-90*degToRad, 1, 0, 0);
+		this.scene.scale(0.1, 0.1, 0.1);
+		this.scene.droneBaseAppearance[this.scene.currDroneAppearance].apply();
+		this.cylinder.display();
+ 	this.scene.popMatrix();
+	
+	//drone longitudinal arm base 1 propeller
+ 	this.scene.pushMatrix();
+ 		this.scene.translate(0, 0.05, 0.75);
+		this.scene.scale(0.1, 0.1, 0.1);
+		this.propellerFront.display();
+ 	this.scene.popMatrix();
+
+	//drone longitudinal arm base 2
+ 	this.scene.pushMatrix();
+ 		this.scene.translate(0, -0.05, -0.75);
+		this.scene.rotate(-90*degToRad, 1, 0, 0);
+		this.scene.scale(0.1, 0.1, .1);
+		this.scene.droneBaseAppearance[this.scene.currDroneAppearance].apply();
+		this.cylinder.display();
+ 	this.scene.popMatrix();
+
+	//drone longitudinal arm base 2 propeller
+ 	this.scene.pushMatrix();
+ 		this.scene.translate(0, 0.05, -0.75);
+		this.scene.scale(0.1, 0.1, 0.1);
+		this.scene.materialA.apply();
+		this.propellerRear.display();
+ 	this.scene.popMatrix();
+
+ 	// drone transversal arm
+ 	this.scene.pushMatrix();
+		this.scene.rotate(-90*degToRad, 0, 1, 0);
+		this.scene.scale(0.03, 0.03, 1.5);
+		this.scene.translate(0, 0, -0.5);
+		this.scene.droneTransversalArmAppearance[this.scene.currDroneAppearance].apply();
+		this.cylinder.display();
+ 	this.scene.popMatrix();
+
+	//drone transversal arm base 1
+ 	this.scene.pushMatrix();
+ 		this.scene.translate(-0.75, -0.05, 0);
+		this.scene.rotate(-90*degToRad, 1, 0, 0);
+		this.scene.scale(0.1, 0.1, .1);
+		this.scene.droneBaseAppearance[this.scene.currDroneAppearance].apply();
+		this.cylinder.display();
+ 	this.scene.popMatrix();
+
+	//drone transversal arm base 1 propeller
+ 	this.scene.pushMatrix();
+ 		this.scene.translate(-0.75, 0.05, 0);
+		this.scene.scale(0.1, 0.1, 0.1);
+		this.scene.materialA.apply();
+		this.propellerSides.display();
+ 	this.scene.popMatrix();
+
+	//drone transversal arm base 2
+ 	this.scene.pushMatrix();
+ 		this.scene.translate(0.75, -0.05, 0);
+		this.scene.rotate(-90*degToRad, 1, 0, 0);
+		this.scene.scale(0.1, 0.1, .1);
+		this.scene.droneBaseAppearance[this.scene.currDroneAppearance].apply();
+		this.cylinder.display();
+ 	this.scene.popMatrix();
+
+	//drone transversal arm base 2 propeller
+ 	this.scene.pushMatrix();
+ 		this.scene.translate(0.75, 0.05, 0);
+		this.scene.scale(0.1, 0.1, 0.1);
+		this.scene.materialA.apply();
+		this.propellerSides.display();
+ 	this.scene.popMatrix();
+
+ 	// drone right foot
+ 	this.scene.pushMatrix();
+ 		this.scene.translate(-0.3, -0.3, 0);
+		this.scene.scale(0.03, 0.03, 1);
+		this.scene.droneFootAppearance[this.scene.currDroneAppearance].apply();
+		this.cube.display();
+ 	this.scene.popMatrix();
+
+ 	// drone left foot
+ 	this.scene.pushMatrix();
+ 		this.scene.translate(0.3, -0.3, 0);
+		this.scene.scale(0.03, 0.03, 1);
+		this.scene.droneFootAppearance[this.scene.currDroneAppearance].apply();
+		this.cube.display();
+ 	this.scene.popMatrix();
+
+ 	this.scene.pushMatrix();
+ 		this.scene.translate(0, -0.35, 0.14);
+		this.scene.scale(0.3, 0.34, 0.3);
+		this.scene.droneFootAppearance[this.scene.currDroneAppearance].apply();
+		this.leg1.display();
+ 	this.scene.popMatrix();
+
+ 	this.scene.pushMatrix();
+ 		//this.scene.rotate(5*degToRad, 0, 0, 1);
+ 		this.scene.translate(0, -0.35, -0.14);
+		this.scene.scale(0.3, 0.34, 0.3);
+		this.scene.droneFootAppearance[this.scene.currDroneAppearance].apply();
+		this.leg1.display();
+ 	this.scene.popMatrix();
     
     this.scene.popMatrix();
 }

@@ -1,4 +1,4 @@
- MyInterface.Keys =
+MyInterface.Keys =
  {
  	LEFT : 65,		//a
  	RIGHT : 68,		//d
@@ -7,12 +7,6 @@
  	UP : 73,		//i
  	DOWN : 74		//j
  };
-
-
- /**
- * MyInterface
- * @constructor
- */
  
 function MyInterface() {
 	//call CGFinterface constructor 
@@ -56,17 +50,24 @@ MyInterface.prototype.init = function(application) {
 	groupLights.add(this.scene, 'LIGHT_2');
 	groupLights.add(this.scene, 'LIGHT_3');
 	groupLights.add(this.scene, 'LIGHT_4');
+
+	this.gui.add(this.scene, 'droneAppearance', this.scene.droneAppearanceList);
+
 	
 	// add a slider
 	// must be a numeric variable of the scene, initialized in scene.init e.g.
 	// this.speed=3;
 	// min and max values can be specified as parameters
 	
-	this.gui.add(this.scene, 'speed', -5, 5);
+	this.gui.add(this.scene, 'speed', 0.1, 2);
 
 	return true;
 };
 
+/**
+ * processKeyboard
+ * @param event {Event}
+ */
 /**
  * processKeyDown
  * @param event {Event}

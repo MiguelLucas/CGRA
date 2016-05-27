@@ -24,7 +24,10 @@ LightingScene.prototype.init = function(application) {
 
 	this.clockAnimation = true;
 
-	this.speed = 3;
+	this.speed = 1;
+	this.currDroneAppearance = 0;
+
+	this.droneAppearance = "Space";
 
 	this.enableTextures(true);
 
@@ -102,6 +105,133 @@ LightingScene.prototype.init = function(application) {
 	this.columnAppearance = new CGFappearance(this);
 	this.columnAppearance.loadTexture("../resources/images/pillar.jpg");
 	this.columnAppearance.setTextureWrap("CLAMP_TO_EDGE","CLAMP_TO_EDGE");
+
+	//colors
+
+	this.lightBlue = new CGFappearance(this);
+	this.lightBlue.setAmbient(0.3,0.3,0.3,1);
+	this.lightBlue.setDiffuse(0/255,255/255,255/255,1);
+	this.lightBlue.setSpecular(0.5,0.5,0.5,1);
+	this.lightBlue.setShininess(120);
+
+	this.orange = new CGFappearance(this);
+	this.orange.setAmbient(0.3,0.3,0.3,1);
+	this.orange.setDiffuse(255/255,142/255,0/255,1);
+	this.orange.setSpecular(0.5,0.5,0.5,1);
+	this.orange.setShininess(120);
+
+	this.red = new CGFappearance(this);
+	this.red.setAmbient(0.3,0.3,0.3,1);
+	this.red.setDiffuse(255/255,43/255,43/255,1);
+	this.red.setSpecular(0.5,0.5,0.5,1);
+	this.red.setShininess(120);
+
+	this.silver = new CGFappearance(this);
+	this.silver.setAmbient(0.3,0.3,0.3,1);
+	this.silver.setDiffuse(192/255,192/255,192/255,1);
+	this.silver.setSpecular(0.5,0.5,0.5,1);
+	this.silver.setShininess(120);
+
+	//appearances
+
+	this.metalAppearance = new CGFappearance(this);
+	this.metalAppearance.loadTexture("../resources/images/metal.jpg");
+	this.metalAppearance.setSpecular(0.7,0.7,0.7,1);
+	this.metalAppearance.setTextureWrap("CLAMP_TO_EDGE","CLAMP_TO_EDGE");
+
+	this.metalAppearance2 = new CGFappearance(this);
+	this.metalAppearance2.loadTexture("../resources/images/metal2.jpg");
+	this.metalAppearance2.setSpecular(0.7,0.7,0.7,1);
+	this.metalAppearance2.setTextureWrap("CLAMP_TO_EDGE","CLAMP_TO_EDGE");
+
+	this.spaceAppearance = new CGFappearance(this);
+	this.spaceAppearance.loadTexture("../resources/images/space.png");
+	this.spaceAppearance.setSpecular(0.7,0.7,0.7,1);
+	this.spaceAppearance.setShininess(120);
+
+	this.dogeAppearance = new CGFappearance(this);
+	this.dogeAppearance.loadTexture("../resources/images/doge.jpg");
+	this.dogeAppearance.setSpecular(0.7,0.7,0.7,1);
+	this.dogeAppearance.setShininess(120);
+
+	this.tronAppearance = new CGFappearance(this);
+	this.tronAppearance.loadTexture("../resources/images/tron.jpg");
+	this.tronAppearance.setSpecular(0.7,0.7,0.7,1);
+	this.tronAppearance.setShininess(120);
+
+	this.angryAppearance = new CGFappearance(this);
+	this.angryAppearance = this.silver;
+	this.angryAppearance.loadTexture("../resources/images/angry.jpg");
+	this.angryAppearance.setSpecular(0.7,0.7,0.7,1);
+	this.angryAppearance.setShininess(120);
+
+	this.kaleiAppearance = new CGFappearance(this);
+	this.kaleiAppearance.loadTexture("../resources/images/kalei.jpg");
+	this.kaleiAppearance.setSpecular(0.7,0.7,0.7,1);
+	this.kaleiAppearance.setShininess(120);
+
+	this.machineAppearance = new CGFappearance(this);
+	this.machineAppearance.loadTexture("../resources/images/machine.jpg");
+	this.machineAppearance.setSpecular(0.7,0.7,0.7,1);
+	this.machineAppearance.setShininess(120);
+
+	this.rustAppearance = new CGFappearance(this);
+	this.rustAppearance.loadTexture("../resources/images/rust.jpg");
+	this.rustAppearance.setSpecular(0.7,0.7,0.7,1);
+	this.rustAppearance.setShininess(120);
+
+	//mapping drone appearances
+	
+    this.droneBodyAppearance = [];
+	this.droneLongitudalArmAppearance = [];
+	this.droneTransversalArmAppearance = [];
+	this.droneBaseAppearance = [];
+	this.droneFootAppearance = [];
+	this.dronePropellerCenterAppearance = [];
+	this.dronePropellerBladesAppearance = [];
+
+	this.droneBodyAppearance[0] = this.spaceAppearance;
+	this.droneLongitudalArmAppearance[0] = this.machineAppearance;
+	this.droneTransversalArmAppearance[0] = this.machineAppearance;
+	this.droneBaseAppearance[0] = this.machineAppearance;
+	this.droneFootAppearance[0] = this.metalAppearance2;
+	this.dronePropellerCenterAppearance[0] = this.metalAppearance2;
+	this.dronePropellerBladesAppearance[0] = this.metalAppearance;
+
+	this.droneBodyAppearance[1] = this.kaleiAppearance;
+	this.droneLongitudalArmAppearance[1] = this.rustAppearance;
+	this.droneTransversalArmAppearance[1] = this.rustAppearance;
+	this.droneBaseAppearance[1] = this.kaleiAppearance;
+	this.droneFootAppearance[1] = this.rustAppearance;
+	this.dronePropellerCenterAppearance[1] = this.rustAppearance;
+	this.dronePropellerBladesAppearance[1] = this.metalAppearance;
+		
+	this.droneBodyAppearance[2] = this.tronAppearance;
+	this.droneLongitudalArmAppearance[2] = this.tronAppearance;
+	this.droneTransversalArmAppearance[2] = this.tronAppearance;
+	this.droneBaseAppearance[2] = this.tronAppearance;
+	this.droneFootAppearance[2] = this.tronAppearance;
+	this.dronePropellerCenterAppearance[2] = this.tronAppearance;
+	this.dronePropellerBladesAppearance[2] = this.metalAppearance;
+		
+	this.droneBodyAppearance[3] = this.angryAppearance;
+	this.droneLongitudalArmAppearance[3] = this.red;
+	this.droneTransversalArmAppearance[3] = this.red;
+	this.droneBaseAppearance[3] = this.red;
+	this.droneFootAppearance[3] = this.orange;
+	this.dronePropellerCenterAppearance[3] = this.orange;
+	this.dronePropellerBladesAppearance[3] = this.metalAppearance;
+		
+	this.droneBodyAppearance[4] = this.dogeAppearance;
+	this.droneLongitudalArmAppearance[4] = this.silver;
+	this.droneTransversalArmAppearance[4] = this.silver;
+	this.droneBaseAppearance[4] = this.orange;
+	this.droneFootAppearance[4] = this.silver;
+	this.dronePropellerCenterAppearance[4] = this.lightBlue;
+	this.dronePropellerBladesAppearance[4] = this.metalAppearance;
+
+	this.droneAppearanceList = ['Space', 'Rusty', 'Tron', 'Face', 'Doge'];
+	
 	
 	this.setUpdatePeriod(1000/60);
 	
@@ -289,7 +419,7 @@ LightingScene.prototype.display = function() {
 		this.drone.display();
 	this.popMatrix();
 
-	// ---- END Primitive drawing section
+	//GUI Lights
 
 	if (this.LIGHT_0)
 		this.lights[0].enable();
@@ -315,6 +445,26 @@ LightingScene.prototype.display = function() {
 		this.lights[4].enable();
 	else
 		this.lights[4].disable();
+
+	//GUI Appearance choice
+
+	switch(this.droneAppearance){
+		case "Space":
+			this.currDroneAppearance = 0;
+			break;
+		case "Rusty":
+			this.currDroneAppearance = 1;
+			break;
+		case "Tron":
+			this.currDroneAppearance = 2;
+			break;
+		case "Face":
+			this.currDroneAppearance = 3;
+			break;
+		case "Doge":
+			this.currDroneAppearance = 4;
+			break;
+	}
 };
 
 LightingScene.prototype.update = function(currTime) {
