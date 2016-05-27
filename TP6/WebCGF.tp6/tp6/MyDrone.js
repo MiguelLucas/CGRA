@@ -13,8 +13,7 @@ function MyDrone(scene) {
     this.propellerFront = new MyPropeller(this.scene,true);
     this.propellerRear = new MyPropeller(this.scene,true);
     this.propellerSides = new MyPropeller(this.scene,false);
-    this.leg1 = new MyDroneLeg(this.scene,20);
-    this.leg2 = new MyDroneLeg(this.scene,20);
+    this.leg = new MyCubicSurface(this.scene, 0, 1, 1, 1, 1, 0);
     
     //position
     this.posX = 4;
@@ -35,8 +34,7 @@ function MyDrone(scene) {
 
     this.rotationSpeed = 0.05;
     this.speed = 0.002;
-}
-;
+};
 
 MyDrone.prototype = Object.create(CGFobject.prototype);
 MyDrone.prototype.constructor = MyDrone;
@@ -70,7 +68,6 @@ MyDrone.prototype.display = function()
  	this.scene.pushMatrix();
 		this.scene.scale(0.03, 0.03, 1.5);
 		this.scene.translate(0, 0, -0.5);
-		//this.scene.materialA.apply();
 		this.scene.droneLongitudalArmAppearance[this.scene.currDroneAppearance].apply();
 		this.cylinder.display();
  	this.scene.popMatrix();
@@ -167,19 +164,20 @@ MyDrone.prototype.display = function()
 		this.cube.display();
  	this.scene.popMatrix();
 
+ 	// drone front leg
  	this.scene.pushMatrix();
- 		this.scene.translate(0, -0.35, 0.14);
-		this.scene.scale(0.3, 0.34, 0.3);
+ 		this.scene.translate(-0.3, -0.3, 0.1);
+		this.scene.scale(0.6, 0.36, 0.05);
 		this.scene.droneFootAppearance[this.scene.currDroneAppearance].apply();
-		this.leg1.display();
+		this.leg.display();
  	this.scene.popMatrix();
 
+ 	// drone back leg
  	this.scene.pushMatrix();
- 		//this.scene.rotate(5*degToRad, 0, 0, 1);
- 		this.scene.translate(0, -0.35, -0.14);
-		this.scene.scale(0.3, 0.34, 0.3);
+ 		this.scene.translate(-0.3, -0.3, -0.15);
+		this.scene.scale(0.6, 0.36, 0.05);
 		this.scene.droneFootAppearance[this.scene.currDroneAppearance].apply();
-		this.leg1.display();
+		this.leg.display();
  	this.scene.popMatrix();
     
     this.scene.popMatrix();

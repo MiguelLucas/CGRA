@@ -61,7 +61,7 @@ MyClock.prototype.display = function () {
 };
 
 MyClock.prototype.update = function (time) {
-    var secAng = (time/1000 % 60) * 360/60;
+    var secAng = Math.floor(time/1000 % 60) * 360/60;
     var minAng = (time/(1000*60) % 60) * 360/60;
     var hourAng = (time/(1000*60*60) % 24) * 360/24;
     this.clockHandHours.setAngle(hourAng);

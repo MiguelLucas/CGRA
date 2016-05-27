@@ -58,6 +58,8 @@ LightingScene.prototype.init = function(application) {
 
 	this.drone = new MyDrone(this);
 
+	this.droneFoot = new MyCubicSurface(this, 0, 2, 2, 2, 2, 0);
+
 	// Materials
 	this.materialDefault = new CGFappearance(this);
 	
@@ -316,7 +318,7 @@ LightingScene.prototype.display = function() {
 	// Draw axis
 	this.axis.display();
 
-	this.materialDefault.apply();
+	//this.materialDefault.apply();
 
 	// ---- END Background, camera and axis setup
 
@@ -417,6 +419,13 @@ LightingScene.prototype.display = function() {
 	// Drone
 	this.pushMatrix();
 		this.drone.display();
+	this.popMatrix();
+
+	// TEST
+	this.pushMatrix();
+		this.translate(1, 0, 1);
+		this.boardAppearance.apply();
+		this.droneFoot.display();
 	this.popMatrix();
 
 	//GUI Lights
