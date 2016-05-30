@@ -22,28 +22,75 @@
  	this.texCoords = [];
 
  	var alpha = 2*Math.PI/this.slices;
- 	var alphaHor = Math.PI/2/this.stacks;
 
-	for(i = 0; i <= this.stacks; i++) {
-		for(j = 0; j < this.slices; j++) {
-			var x = Math.cos(alpha*j) * Math.cos(alphaHor*i);
-			var y = Math.sin(alpha*j) * Math.cos(alphaHor*i);
-			this.vertices.push(x ,y, Math.sin(alphaHor*i));
-			this.normals.push(Math.cos(alpha*j) * Math.cos(alphaHor*i),Math.sin(alpha*j) * Math.cos(alphaHor*i),0);
-			this.texCoords.push(x * 0.5 + 0.5, y * 0.5 + 0.5);
-		}
-	}	
-		
-	for(i = 0; i < this.stacks; i++) {
-		for(j = 0; j < this.slices - 1; j++) {
-			this.indices.push(i*this.slices + j, i*this.slices + j+1, (i+1)*this.slices + j);
-			this.indices.push(i*this.slices + j+1, (i+1)*this.slices + j+1, (i+1)*this.slices + j);
-		}
+ 	for(j = 0; j <= this.stacks; j++)
+	{
+ 		if(j < this.stacks)
+ 		{
+ 			for(i = 0; i < this.slices; i++)
+ 			{
+ 				var x = Math.cos(alpha*i)*Math.cos(Math.asin(j/this.stacks));
+ 				var y = Math.sin(alpha*i)*Math.cos(Math.asin(j/this.stacks));
+ 				
+ 				this.vertices.push(x);
+	 			this.vertices.push(y);
+	 			this.vertices.push(j/this.stacks);
 
-		this.indices.push(i*this.slices + this.slices - 1, i*this.slices, (i+1)*this.slices + this.slices - 1);
-		this.indices.push(i*this.slices, i*this.slices + this.slices, (i+1)*this.slices + this.slices - 1);
-	}
-	
+	 			this.normals.push(x);
+	 			this.normals.push(y);
+				this.normals.push(j/this.stacks);
+
+				this.texCoords.push(0.5*x + 0.5, 0.5 - 0.5*y);
+
+				if(j < this.stacks-1)
+				{
+					if (i == this.slices - 1)
+					{
+						this.indices.push(0 + i + this.slices*j);
+						this.indices.push(1 + i + this.slices*(j-1));
+						this.indices.push(1 + i + this.slices*(j));
+
+						this.indices.push(1 + i + this.slices*(j));
+						this.indices.push(0 + i + this.slices*(j+1));
+						this.indices.push(0 + i + this.slices*j);
+					}
+					else
+					{
+						this.indices.push(0 + i + this.slices*j);
+						this.indices.push(1 + i + this.slices*j);
+						this.indices.push(1 + i + this.slices*(j+1));
+
+						this.indices.push(1 + i + this.slices*(j+1));
+						this.indices.push(0 + i + this.slices*(j+1));
+						this.indices.push(0 + i + this.slices*j);
+					}
+				}
+ 			} 			
+ 		}
+ 		else
+ 		{
+ 			this.vertices.push(0);
+	 		this.vertices.push(0);
+	 		this.vertices.push(1);
+
+	 		this.normals.push(0);
+	 		this.normals.push(0);
+			this.normals.push(1);
+
+			this.texCoords.push(.5, .5);
+
+	 		for(i = 0; i < this.slices-1; i++)
+ 			{
+ 				this.indices.push(0 + i + this.slices*(j-1));
+				this.indices.push(1 + i + this.slices*(j-1));
+				this.indices.push(this.slices*this.stacks);
+ 			}
+ 			this.indices.push(this.slices*j-1);
+			this.indices.push(this.slices*(j-1));
+			this.indices.push(this.slices*this.stacks);
+ 		}
+ 	}
+
  	this.primitiveType = this.scene.gl.TRIANGLES;
  	this.initGLBuffers();
  };

@@ -1,11 +1,13 @@
 MyInterface.Keys =
  {
- 	LEFT : 65,		//a
- 	RIGHT : 68,		//d
- 	FORWARD : 87,	//w
- 	BACK : 83,		//s
- 	UP : 73,		//i
- 	DOWN : 74		//j
+ 	LEFT : 65,		//A
+ 	RIGHT : 68,		//D
+ 	FORWARD : 87,	//W
+ 	BACK : 83,		//S
+ 	UP : 73,		//I
+ 	DOWN : 74,		//J
+ 	CABLE_UP : 80,	//P
+ 	CABLE_DOWN : 76	//L
  };
  
 function MyInterface() {
@@ -68,6 +70,8 @@ MyInterface.prototype.init = function(application) {
  * processKeyboard
  * @param event {Event}
  */
+MyInterface.prototype.processKeyboard = function(event) { }
+
 /**
  * processKeyDown
  * @param event {Event}
@@ -93,6 +97,12 @@ MyInterface.prototype.processKeyDown = function(event) {
 			break;
 		case (MyInterface.Keys.DOWN):
 			this.scene.drone.move('down');
+			break;
+		case (MyInterface.Keys.CABLE_UP):
+			this.scene.drone.cable.lift();
+			break;
+		case (MyInterface.Keys.CABLE_DOWN):
+			this.scene.drone.cable.lower();
 			break;
 	};
 };
@@ -123,5 +133,12 @@ MyInterface.prototype.processKeyUp = function(event) {
 		case (MyInterface.Keys.DOWN):
 			this.scene.drone.stop('down');
 			break;
+		case (MyInterface.Keys.CABLE_UP):
+			this.scene.drone.cable.stoplift();
+			break;
+		case (MyInterface.Keys.CABLE_DOWN):
+			this.scene.drone.cable.stoplower();
+			break;
 	};
 };
+

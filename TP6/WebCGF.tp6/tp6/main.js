@@ -63,7 +63,8 @@ serialInclude([
 'MyPropeller.js', 
 'MyForm.js', 
 'MyDroneLeg.js', 
-'MyCubicSurface.js', 
+'MyCubicSurface.js',
+'MyCable.js',
 
 main = function() {
     var app = new CGFapplication(document.body);

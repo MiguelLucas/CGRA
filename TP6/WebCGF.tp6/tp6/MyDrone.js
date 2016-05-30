@@ -14,6 +14,7 @@ function MyDrone(scene) {
     this.propellerRear = new MyPropeller(this.scene,true);
     this.propellerSides = new MyPropeller(this.scene,false);
     this.leg = new MyCubicSurface(this.scene, 0, 1, 1, 1, 1, 0);
+    this.cable = new MyCable(this.scene);
     
     //position
     this.posX = 4;
@@ -45,12 +46,12 @@ MyDrone.prototype.display = function()
     this.scene.pushMatrix();
         this.scene.translate(this.posX, this.posY, this.posZ);
         this.scene.rotate(this.facingAngle * degToRad, 0, 1, 0);
+        this.cable.display();
         this.scene.rotate(this.pitchAngle * degToRad, 1, 0, 0);
         this.scene.scale(2,2,2);
    
     //drone body
     this.scene.pushMatrix();
-    	this.scene.rotate(-180*degToRad, 0, 1, 0);
 		this.scene.rotate(-90*degToRad, 1, 0, 0);
 		this.scene.scale(0.25, 0.25, 0.25);
 		this.scene.droneBodyAppearance[this.scene.currDroneAppearance].apply();
@@ -332,4 +333,6 @@ MyDrone.prototype.update = function(t)
     this.propellerFront.update(t);
     this.propellerRear.update(t);
     this.propellerSides.update(t);
+
+    this.cable.update(t);
 }

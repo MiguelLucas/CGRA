@@ -51,7 +51,7 @@ LightingScene.prototype.init = function(application) {
 	this.boardA = new Plane(this, BOARD_A_DIVISIONS);
 	this.boardB = new Plane(this, BOARD_B_DIVISIONS);
 
-	this.lamp = new MySemisphere(this, 16, 10);
+	this.lamp = new MySemisphere(this, 16, 20);
 	this.cylinder = new MyCylinder(this, 8, 20, true, true);
 
 	this.clock = new MyClock(this);
