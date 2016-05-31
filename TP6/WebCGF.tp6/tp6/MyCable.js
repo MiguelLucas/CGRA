@@ -8,7 +8,7 @@ function MyCable(scene) {
     CGFobject.call(this, scene);
     
     this.cable = new MyCylinder(this.scene,16,3,false,false);
-    this.hook = new MyUnitCubeQuad(this.scene);
+    this.hook = new MyCubicSurface(this.scene, 2, -.5,  5, 3,  3, -1);
     
     //position
     this.cableLength = .5;
@@ -30,7 +30,7 @@ MyCable.prototype.display = function()
     // cable
     this.scene.pushMatrix();
     this.scene.rotate(90 * degToRad, 1, 0, 0);
-    this.scene.scale(.02, .02, this.cableLength);
+    this.scene.scale(.01, .01, this.cableLength);
     this.scene.metalAppearance.apply();
     this.cable.display();
     this.scene.popMatrix();
@@ -38,7 +38,9 @@ MyCable.prototype.display = function()
     // hook
     this.scene.pushMatrix();
     this.scene.translate(0, -this.cableLength, 0);
-    this.scene.scale(.1, .1, .1);
+    this.scene.rotate(-90 * degToRad, 0, 0, 1);
+    this.scene.scale(.05, .05, .025);
+    this.scene.translate(0, 0, -0.5);
     this.hook.display();
     this.scene.popMatrix();
 };

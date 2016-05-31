@@ -1,3 +1,5 @@
+var degToRad = Math.PI / 180.0;
+
 /**
  * MyCargo
  * @constructor
@@ -14,6 +16,7 @@ function MyCargo(scene) {
     this.posX = 12.5;
     this.posY = 3.7;
     this.posZ = 8;
+    this.angle = 0;
 
     this.picked = false;
     this.delivered = false;    
@@ -27,6 +30,7 @@ MyCargo.prototype.display = function()
     // cargo
     this.scene.pushMatrix();
     this.scene.translate(this.posX, this.posY, this.posZ);
+    this.scene.rotate(this.angle*degToRad, 0, 1, 0);
     this.scene.scale(this.length, this.height, this.width);
     this.scene.translate(0, 0.5, 0);
     if (this.delivered == true)
@@ -64,6 +68,7 @@ MyCargo.prototype.update = function(pos)
     this.posX = pos.x;
     this.posY = pos.y - this.height;
     this.posZ = pos.z;
+    this.angle = pos.alpha;
 };
 
 MyCargo.prototype.drop = function(pos) 

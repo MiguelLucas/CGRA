@@ -60,8 +60,6 @@ LightingScene.prototype.init = function(application) {
     this.cargo = new MyCargo(this);
     this.dropspot = new MyDropSpot(this);
     
-    this.cubicSurface = new MyCubicSurface(this,0,2,2,2,2,0);
-    
     // Materials
     this.materialDefault = new CGFappearance(this);
     
@@ -97,7 +95,6 @@ LightingScene.prototype.init = function(application) {
     this.slidesAppearance.setDiffuse(0.9, 0.9, 0.9, 1);
     this.slidesAppearance.setSpecular(0.1, 0.1, 0.1, 1);
     this.slidesAppearance.setShininess(30);
-    //this.slidesAppearance.setTextureWrap("CLAMP_TO_EDGE","CLAMP_TO_EDGE");
     
     this.boardAppearance = new CGFappearance(this);
     this.boardAppearance.loadTexture("../resources/images/board.png");
@@ -118,8 +115,7 @@ LightingScene.prototype.init = function(application) {
     this.targetAppearance.loadTexture("../resources/images/target.png");
     this.targetAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
     
-    //colors
-    
+    //colors    
     this.lightBlue = new CGFappearance(this);
     this.lightBlue.setAmbient(0.3, 0.3, 0.3, 1);
     this.lightBlue.setDiffuse(0 / 255, 255 / 255, 255 / 255, 1);
@@ -144,8 +140,7 @@ LightingScene.prototype.init = function(application) {
     this.silver.setSpecular(0.5, 0.5, 0.5, 1);
     this.silver.setShininess(120);
     
-    //appearances
-    
+    //appearances    
     this.metalAppearance = new CGFappearance(this);
     this.metalAppearance.loadTexture("../resources/images/metal.jpg");
     this.metalAppearance.setSpecular(0.7, 0.7, 0.7, 1);
@@ -192,8 +187,7 @@ LightingScene.prototype.init = function(application) {
     this.rustAppearance.setSpecular(0.7, 0.7, 0.7, 1);
     this.rustAppearance.setShininess(120);
     
-    //mapping drone appearances
-    
+    //mapping drone appearances    
     this.droneBodyAppearance = [];
     this.droneLongitudalArmAppearance = [];
     this.droneTransversalArmAppearance = [];
@@ -242,18 +236,14 @@ LightingScene.prototype.init = function(application) {
     this.dronePropellerCenterAppearance[4] = this.lightBlue;
     this.dronePropellerBladesAppearance[4] = this.metalAppearance;
     
-    this.droneAppearanceList = ['Space', 'Rusty', 'Tron', 'Face', 'Doge'];
-    
+    this.droneAppearanceList = ['Space', 'Rusty', 'Tron', 'Face', 'Doge'];    
     
     this.setUpdatePeriod(1000 / 60);
-
-}
-;
+};
 
 LightingScene.prototype.initCameras = function() {
     this.camera = new CGFcamera(0.4,0.1,500,vec3.fromValues(30, 30, 30),vec3.fromValues(0, 0, 0));
-}
-;
+};
 
 LightingScene.prototype.initLights = function() {
     this.setGlobalAmbientLight(0, 0, 0, 0);
@@ -276,11 +266,7 @@ LightingScene.prototype.initLights = function() {
     this.lights[4].setPosition(0, 5, 8, 1);
     this.lights[4].setVisible(true);
     
-    //this.lights[2].setPosition(10.5, 6.0, 5.0, 1.0);
-    //this.lights[1].setVisible(true); // show marker on light position (different from enabled)
-    //this.lights[3].setPosition(4, 6.0, 5.0, 1.0);
-    //this.lights[1].setVisible(true); // show marker on light position (different from enabled)
-    
+   
     this.lights[0].setAmbient(0, 0, 0, 1);
     this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
     this.lights[0].setSpecular(1, 1, 0, 1);
@@ -292,32 +278,26 @@ LightingScene.prototype.initLights = function() {
     this.lights[2].setDiffuse(1.0, 1.0, 1.0, 1.0);
     this.lights[2].setSpecular(1, 1, 1, 1);
     this.lights[2].setConstantAttenuation(0.0);
-    //kc
     this.lights[2].setLinearAttenuation(1);
-    //kl
     this.lights[2].setQuadraticAttenuation(0.0);
-    //kq
+
     
     this.lights[3].setAmbient(0, 0, 0, 1);
     this.lights[3].setDiffuse(1.0, 1.0, 1.0, 1.0);
     this.lights[3].setSpecular(1, 1, 0, 1);
     this.lights[3].setConstantAttenuation(0.0);
-    //kc
     this.lights[3].setLinearAttenuation(0.0);
-    //kl
     this.lights[3].setQuadraticAttenuation(1);
-    //kq
     
     this.lights[4].setAmbient(0, 0, 0, 1);
     this.lights[4].setDiffuse(1.0, 1.0, 1.0, 1.0);
     this.lights[4].setSpecular(0, 0, 0, 0);
-}
-;
+};
 
 LightingScene.prototype.updateLights = function() {
     for (i = 0; i < this.lights.length; i++)
         this.lights[i].update();
-}
+};
 
 LightingScene.prototype.display = function() {
     // ---- BEGIN Background, camera and axis setup
@@ -446,18 +426,10 @@ LightingScene.prototype.display = function() {
     this.cargo.display();
 
     // Drop spot
-    this.dropspot.display();
+    this.dropspot.display();    
     
-    
-    // TEST
-    this.pushMatrix();
-    this.translate(1, 0, 1);
-    this.boardAppearance.apply();
-    this.cubicSurface.display();
-    this.popMatrix();
-    
-    //GUI Lights
-    
+
+    //GUI Lights    
     if (this.LIGHT_0)
         this.lights[0].enable();
     else
@@ -483,8 +455,7 @@ LightingScene.prototype.display = function() {
     else
         this.lights[4].disable();
     
-    //GUI Appearance choice
-    
+    //GUI Appearance choice    
     switch (this.droneAppearance) {
     case "Space":
         this.currDroneAppearance = 0;
@@ -502,14 +473,15 @@ LightingScene.prototype.display = function() {
         this.currDroneAppearance = 4;
         break;
     }
-}
-;
+};
 
-LightingScene.prototype.update = function(currTime) {
+LightingScene.prototype.update = function(currTime)
+{
     if (this.clockAnimation)
         this.clock.update(currTime);
     this.drone.update(currTime);    
 
+    //update da carga
     if (!this.cargo.delivered)
     {
         var cargoPos = this.cargo.getPosition();
@@ -517,7 +489,7 @@ LightingScene.prototype.update = function(currTime) {
 
         if (!this.cargo.picked)
         {
-            //se ainda não foi apanhada a carga verifica se as posiçoes se intersectam
+            //se ainda não foi apanhada a carga verifica se a posição do gancho coincide com a da caixa
             if (hookPos.x > cargoPos.xMin && hookPos.x < cargoPos.xMax && 
             hookPos.y > cargoPos.yMin && hookPos.y < cargoPos.yMax && 
             hookPos.z > cargoPos.zMin && hookPos.z < cargoPos.zMax)
@@ -526,18 +498,19 @@ LightingScene.prototype.update = function(currTime) {
         else{
             var dropspotPos = this.dropspot.getPosition();
 
+            //se foi apanhada a carga verifica se a posição da caixa coincide com a do destino 
             if ( Math.abs(dropspotPos.y - cargoPos.y) < 0.1 &&
             Math.sqrt( Math.pow(dropspotPos.x-cargoPos.x, 2) + Math.pow(dropspotPos.z-cargoPos.z, 2) ) < dropspotPos.radious )
             {
                 this.cargo.delivered = true;
                 this.cargo.drop(dropspotPos);
             }
+            //caso contrario move a caixa com o gancho 
             else
                 this.cargo.update(hookPos);
         }
-        console.log(cargoPos);
     }
-}
+};
 
 LightingScene.prototype.changeClockAnimation = function() {
     
@@ -545,4 +518,4 @@ LightingScene.prototype.changeClockAnimation = function() {
         this.clockAnimation = false;
     else
         this.clockAnimation = true;
-}
+};

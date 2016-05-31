@@ -341,6 +341,7 @@ MyDrone.prototype.getHookPosition = function() {
     return {
         "x": this.posX,
         "y": this.posY - this.cable.cableLength,
-        "z": this.posZ
+        "z": this.posZ,
+        "alpha": this.facingAngle
     };
 };
