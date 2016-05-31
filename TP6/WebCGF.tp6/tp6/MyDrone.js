@@ -182,7 +182,7 @@ MyDrone.prototype.display = function()
  	this.scene.popMatrix();
     
     this.scene.popMatrix();
-}
+};
 
 MyDrone.prototype.move = function(direction) {
     switch (direction) {
@@ -233,7 +233,7 @@ MyDrone.prototype.move = function(direction) {
         }
         break;
     }
-}
+};
 
 MyDrone.prototype.stop = function(direction) {
     switch (direction) {
@@ -284,7 +284,7 @@ MyDrone.prototype.stop = function(direction) {
         }
         break;
     }
-}
+};
 
 MyDrone.prototype.update = function(t) 
 {
@@ -335,4 +335,12 @@ MyDrone.prototype.update = function(t)
     this.propellerSides.update(t);
 
     this.cable.update(t);
-}
+};
+
+MyDrone.prototype.getHookPosition = function() {
+    return {
+        "x": this.posX,
+        "y": this.posY - this.cable.cableLength,
+        "z": this.posZ
+    };
+};

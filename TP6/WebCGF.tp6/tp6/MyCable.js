@@ -11,7 +11,6 @@ function MyCable(scene) {
     this.hook = new MyUnitCubeQuad(this.scene);
     
     //position
-    this.hookPosZ = 2;
     this.cableLength = .5;
     this.minCableLength = .5;
     this.maxCableLength = 5;
@@ -21,8 +20,7 @@ function MyCable(scene) {
     this.loweringCable = false;
     this.liftingCable = false;
     this.speed = 0.002;
-}
-;
+};
 
 MyCable.prototype = Object.create(CGFobject.prototype);
 MyCable.prototype.constructor = MyCable;
@@ -43,27 +41,27 @@ MyCable.prototype.display = function()
     this.scene.scale(.1, .1, .1);
     this.hook.display();
     this.scene.popMatrix();
-}
+};
 
 MyCable.prototype.lift = function() 
 {
     this.liftingCable = true;
-}
+};
 
 MyCable.prototype.stoplift = function() 
 {
     this.liftingCable = false;
-}
+};
 
 MyCable.prototype.lower = function() 
 {
     this.loweringCable = true;
-}
+};
 
 MyCable.prototype.stoplower = function() 
 {
     this.loweringCable = false;
-}
+};
 
 MyCable.prototype.update = function(t) 
 {
@@ -79,4 +77,4 @@ MyCable.prototype.update = function(t)
         this.cableLength = this.minCableLength;
     if (this.cableLength > this.maxCableLength)
         this.cableLength = this.maxCableLength;
-}
+};

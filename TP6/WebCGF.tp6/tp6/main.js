@@ -65,6 +65,7 @@ serialInclude([
 'MyDroneLeg.js', 
 'MyCubicSurface.js',
 'MyCable.js',
+'MyCargo.js',
 
 main = function() {
     var app = new CGFapplication(document.body);
