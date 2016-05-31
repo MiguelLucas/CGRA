@@ -1,5 +1,3 @@
-var degToRad = Math.PI / 180.0;
-
 /**
  * MyCargo
  * @constructor
@@ -26,7 +24,7 @@ MyCargo.prototype.constructor = MyCargo;
 
 MyCargo.prototype.display = function() 
 {
-    // cable
+    // cargo
     this.scene.pushMatrix();
     this.scene.translate(this.posX, this.posY, this.posZ);
     this.scene.scale(this.length, this.height, this.width);
@@ -43,7 +41,8 @@ MyCargo.prototype.display = function()
 
 MyCargo.prototype.getPosition = function() 
 {
-    return {
+    if ( this.picked == false)
+    return {        
         "xMin": this.posX - this.length/2,
         "yMin": this.posY,
         "zMin": this.posZ - this.width/2,
@@ -51,11 +50,25 @@ MyCargo.prototype.getPosition = function()
         "yMax": this.posY + this.height,
         "zMax": this.posZ + this.width/2
     };
+
+    else
+        return {        
+        "x": this.posX,
+        "y": this.posY,
+        "z": this.posZ
+    };
 };
 
 MyCargo.prototype.update = function(pos) 
 {
     this.posX = pos.x;
     this.posY = pos.y - this.height;
+    this.posZ = pos.z;
+};
+
+MyCargo.prototype.drop = function(pos) 
+{
+    this.posX = pos.x;
+    this.posY = pos.y;
     this.posZ = pos.z;
 };

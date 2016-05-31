@@ -56,9 +56,9 @@ LightingScene.prototype.init = function(application) {
     
     this.clock = new MyClock(this);
     
-    this.drone = new MyDrone(this);
-    
+    this.drone = new MyDrone(this);    
     this.cargo = new MyCargo(this);
+    this.dropspot = new MyDropSpot(this);
     
     this.cubicSurface = new MyCubicSurface(this,0,2,2,2,2,0);
     
@@ -113,6 +113,10 @@ LightingScene.prototype.init = function(application) {
     this.lampAppearance = new CGFappearance(this);
     this.lampAppearance.loadTexture("../resources/images/lamp.png");
     this.lampAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
+
+    this.targetAppearance = new CGFappearance(this);
+    this.targetAppearance.loadTexture("../resources/images/target.png");
+    this.targetAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
     
     //colors
     
@@ -440,6 +444,9 @@ LightingScene.prototype.display = function() {
     
     // Cargo
     this.cargo.display();
+
+    // Drop spot
+    this.dropspot.display();
     
     
     // TEST
@@ -501,19 +508,34 @@ LightingScene.prototype.display = function() {
 LightingScene.prototype.update = function(currTime) {
     if (this.clockAnimation)
         this.clock.update(currTime);
-    this.drone.update(currTime);
-    
-    //console.log( this.drone.getHookPosition() );
-    var hookPos = this.drone.getHookPosition();
-    var cargoPos = this.cargo.getPosition();
-    if (!this.cargo.delivered) {
-        if (!this.cargo.picked) {
+    this.drone.update(currTime);    
+
+    if (!this.cargo.delivered)
+    {
+        var cargoPos = this.cargo.getPosition();
+        var hookPos = this.drone.getHookPosition();
+
+        if (!this.cargo.picked)
+        {
+            //se ainda não foi apanhada a carga verifica se as posiçoes se intersectam
             if (hookPos.x > cargoPos.xMin && hookPos.x < cargoPos.xMax && 
             hookPos.y > cargoPos.yMin && hookPos.y < cargoPos.yMax && 
             hookPos.z > cargoPos.zMin && hookPos.z < cargoPos.zMax)
                 this.cargo.picked = true;
         }
-        else(this.cargo.update(hookPos));
+        else{
+            var dropspotPos = this.dropspot.getPosition();
+
+            if ( Math.abs(dropspotPos.y - cargoPos.y) < 0.1 &&
+            Math.sqrt( Math.pow(dropspotPos.x-cargoPos.x, 2) + Math.pow(dropspotPos.z-cargoPos.z, 2) ) < dropspotPos.radious )
+            {
+                this.cargo.delivered = true;
+                this.cargo.drop(dropspotPos);
+            }
+            else
+                this.cargo.update(hookPos);
+        }
+        console.log(cargoPos);
     }
 }
 
