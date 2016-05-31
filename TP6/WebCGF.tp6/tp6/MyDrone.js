@@ -292,16 +292,16 @@ MyDrone.prototype.update = function(t)
     this.previousInstant = t;
     
     if (this.movingForward) {
-        this.posZ += Math.cos(this.facingAngle * degToRad) * deltaT * this.speed;
-        this.posX += Math.sin(this.facingAngle * degToRad) * deltaT * this.speed;
+        this.posZ += Math.cos(this.facingAngle * degToRad) * deltaT * this.speed * this.scene.speed;
+        this.posX += Math.sin(this.facingAngle * degToRad) * deltaT * this.speed * this.scene.speed;
         if (this.pitchAngle < this.maxPitchAngle)
             this.pitchAngle += deltaT / 25;
         if (this.pitchAngle > this.maxPitchAngle)
             this.pitchAngle = this.maxPitchAngle;
     } 
     else if (this.movingBackwards) {
-        this.posZ -= Math.cos(this.facingAngle * degToRad) * deltaT * this.speed;
-        this.posX -= Math.sin(this.facingAngle * degToRad) * deltaT * this.speed;
+        this.posZ -= Math.cos(this.facingAngle * degToRad) * deltaT * this.speed * this.scene.speed;
+        this.posX -= Math.sin(this.facingAngle * degToRad) * deltaT * this.speed * this.scene.speed;
         if (this.pitchAngle > -this.maxPitchAngle)
             this.pitchAngle -= deltaT / 25;
         if (this.pitchAngle < -this.maxPitchAngle)
@@ -315,19 +315,19 @@ MyDrone.prototype.update = function(t)
     }
     
     if (this.movingUp) {
-        this.posY += deltaT * this.speed;
+        this.posY += deltaT * this.speed * this.scene.speed;
     } 
     
     if (this.movingDown) {
-        this.posY -= deltaT * this.speed;
+        this.posY -= deltaT * this.speed * this.scene.speed;
     } 
     
     if (this.rotatingLeft) {
-        this.facingAngle += deltaT * this.rotationSpeed;
+        this.facingAngle += deltaT * this.rotationSpeed * this.scene.speed;
     } 
     
     if (this.rotatingRight) {
-        this.facingAngle -= deltaT * this.rotationSpeed;
+        this.facingAngle -= deltaT * this.rotationSpeed * this.scene.speed;
     } 
     
     this.propellerFront.update(t);
