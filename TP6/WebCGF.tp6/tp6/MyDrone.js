@@ -33,8 +33,18 @@ function MyDrone(scene) {
     this.rotatingLeft = false;
     this.rotatingRight = false;
 
-    this.rotationSpeed = 0.05;
-    this.speed = 0.002;
+    this.rotationSpeed = 0;
+    this.horSpeed = 0;
+    this.verSpeed = 0;
+	this.maxSpeed = 0.006;
+    this.maxRotSpeed = 0.1;
+
+    this.acceleration = 0.0002;
+    this.rotationAcceleration = 0.005;
+    
+    this.horDeceleration = false;
+    this.verDeceleration = false;
+    this.rotDeceleration = false;
 };
 
 MyDrone.prototype = Object.create(CGFobject.prototype);
@@ -243,6 +253,7 @@ MyDrone.prototype.stop = function(direction) {
             this.propellerFront.decreaseSpeed();
             this.propellerRear.decreaseSpeed();
             this.propellerSides.decreaseSpeed();
+            this.verDeceleration = true;
         }
         break;
     case 'down':
@@ -251,6 +262,7 @@ MyDrone.prototype.stop = function(direction) {
             this.propellerFront.increaseSpeed();
             this.propellerRear.increaseSpeed();
             this.propellerSides.increaseSpeed();
+            this.verDeceleration = true;
         }
         break;
     case 'left':
@@ -259,6 +271,7 @@ MyDrone.prototype.stop = function(direction) {
             this.propellerFront.increaseSpeed();
             this.propellerRear.increaseSpeed();
             this.propellerSides.decreaseSpeed();
+            this.rotDeceleration = true;
         }
         break;
     case 'right':
@@ -267,6 +280,7 @@ MyDrone.prototype.stop = function(direction) {
             this.propellerFront.decreaseSpeed();
             this.propellerRear.decreaseSpeed();
             this.propellerSides.increaseSpeed();
+            this.rotDeceleration = true;
         }
         break;
     case 'forward':
@@ -274,6 +288,7 @@ MyDrone.prototype.stop = function(direction) {
             this.movingForward = false;
             this.propellerFront.increaseSpeed();
             this.propellerRear.decreaseSpeed();
+            this.horDeceleration = true;
         }
         break;
     case 'back':
@@ -281,6 +296,7 @@ MyDrone.prototype.stop = function(direction) {
             this.movingBackwards = false;
             this.propellerFront.decreaseSpeed();
             this.propellerRear.increaseSpeed();
+            this.horDeceleration = true;
         }
         break;
     }
@@ -291,46 +307,101 @@ MyDrone.prototype.update = function(t)
     var deltaT = t - this.previousInstant;
     this.previousInstant = t;
     
+	//atualização da posição do drone
     //descomentar valores seguintes para que drone se mova de acordo com velocidade do slider da GUI
+    this.posZ += Math.cos(this.facingAngle * degToRad) * deltaT * this.horSpeed/* * this.scene.speed*/;
+    this.posX += Math.sin(this.facingAngle * degToRad) * deltaT * this.horSpeed/* * this.scene.speed*/;
+    this.posY += deltaT * this.verSpeed/* * this.scene.speed*/;
+    this.facingAngle += deltaT * this.rotationSpeed/* * this.scene.speed*/;
+    
+	//handlers dos movimentos
     if (this.movingForward) {
-        this.posZ += Math.cos(this.facingAngle * degToRad) * deltaT * this.speed/* * this.scene.speed*/;
-        this.posX += Math.sin(this.facingAngle * degToRad) * deltaT * this.speed/* * this.scene.speed*/;
         if (this.pitchAngle < this.maxPitchAngle)
             this.pitchAngle += deltaT / 25;
         if (this.pitchAngle > this.maxPitchAngle)
             this.pitchAngle = this.maxPitchAngle;
+        this.horSpeed += this.acceleration;
     } 
     else if (this.movingBackwards) {
-        this.posZ -= Math.cos(this.facingAngle * degToRad) * deltaT * this.speed/* * this.scene.speed*/;
-        this.posX -= Math.sin(this.facingAngle * degToRad) * deltaT * this.speed/* * this.scene.speed*/;
         if (this.pitchAngle > -this.maxPitchAngle)
             this.pitchAngle -= deltaT / 25;
         if (this.pitchAngle < -this.maxPitchAngle)
             this.pitchAngle = -this.maxPitchAngle;
+        this.horSpeed -= this.acceleration; 
     } 
     else {
         if (this.pitchAngle < 0)
-            this.pitchAngle += deltaT / 10;
+            this.pitchAngle += deltaT / 20;
         if (this.pitchAngle > 0)
-            this.pitchAngle -= deltaT / 10;
+            this.pitchAngle -= deltaT / 20;
     }
-    
+
     if (this.movingUp) {
-        this.posY += deltaT * this.speed/* * this.scene.speed*/;
+        this.verSpeed += this.acceleration;
     } 
     
     if (this.movingDown) {
-        this.posY -= deltaT * this.speed/* * this.scene.speed*/;
+        this.verSpeed -= this.acceleration;
     } 
     
     if (this.rotatingLeft) {
-        this.facingAngle += deltaT * this.rotationSpeed/* * this.scene.speed*/;
+        this.rotationSpeed += this.rotationAcceleration;
     } 
     
     if (this.rotatingRight) {
-        this.facingAngle -= deltaT * this.rotationSpeed/* * this.scene.speed*/;
+        this.rotationSpeed -= this.rotationAcceleration;
     } 
     
+	//limites das velocidades
+	if (this.horSpeed > this.maxSpeed)
+    	this.horSpeed = this.maxSpeed;
+    if (this.horSpeed < (this.maxSpeed * -1))
+    	this.horSpeed = this.maxSpeed * -1;
+
+    if (this.verSpeed > this.maxSpeed)
+    	this.verSpeed = this.maxSpeed;
+    if (this.verSpeed < (this.maxSpeed * -1))
+    	this.verSpeed = this.maxSpeed * -1;
+
+    if (this.rotationSpeed > this.maxRotSpeed)
+    	this.rotationSpeed = this.maxRotSpeed;
+    if (this.rotationSpeed < (this.maxRotSpeed * -1))
+    	this.rotationSpeed = this.maxRotSpeed * -1;
+    
+	//tratamento das desacelerações
+    if (this.horDeceleration){
+    	if (this.horSpeed > 0)
+    		this.horSpeed -= this.acceleration;
+    	if (this.horSpeed < 0)
+    		this.horSpeed += this.acceleration;
+    	if (this.horSpeed < this.acceleration && this.horSpeed > -this.acceleration){
+    		this.horDeceleration = false;
+    		this.horSpeed = 0;
+    	}
+    }
+    
+    if (this.verDeceleration){
+    	if (this.verSpeed > 0)
+    		this.verSpeed -= this.acceleration;
+    	if (this.verSpeed < 0)
+    		this.verSpeed += this.acceleration;
+    	if (this.verSpeed < this.acceleration && this.verSpeed > -this.acceleration){
+    		this.verDeceleration = false;
+    		this.verSpeed = 0;
+    	}
+    }
+
+    if (this.rotDeceleration){
+    	if (this.rotationSpeed > 0)
+    		this.rotationSpeed -= this.rotationAcceleration;
+    	if (this.rotationSpeed < 0)
+    		this.rotationSpeed += this.rotationAcceleration;
+    	if (this.rotationSpeed < this.rotationAcceleration && this.rotationSpeed > -this.rotationAcceleration){
+    		this.rotDeceleration = false;
+    		this.rotationSpeed = 0;
+    	}
+    }
+
     this.propellerFront.update(t);
     this.propellerRear.update(t);
     this.propellerSides.update(t);
